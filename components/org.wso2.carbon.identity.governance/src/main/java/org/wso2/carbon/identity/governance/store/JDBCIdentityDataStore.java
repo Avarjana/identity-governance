@@ -81,7 +81,7 @@ public class JDBCIdentityDataStore extends InMemoryIdentityDataStore {
         try {
             tenantId = userStoreManager.getTenantId();
         } catch (UserStoreException e) {
-            log.error("Error while getting tenant Id.", e);
+            log.error("Error while getting tenant Id", e);
         }
 
         Map<String, String> data = userIdentityDTO.getUserIdentityDataMap();
@@ -100,15 +100,15 @@ public class JDBCIdentityDataStore extends InMemoryIdentityDataStore {
                     String existingValue = existingDataValues.get(key);
                     if (existingValue == null || !existingValue.equals(value)) {
                         if (log.isDebugEnabled()) {
-                            log.debug("Key:" + key + ", Value:" + value + " to be updated for user:" + userName
-                                    + " in JDBCIdentityDataStore");
+                            log.debug("Key:{}, Value:{} to be updated for user:{} in JDBCIdentityDataStore", 
+                                    key, value, userName);
                         }
                         availableClaims.put(key, value);
                     }
                 } else {
                     if (log.isDebugEnabled()) {
-                        log.debug("Key:" + key + ", Value:" + value + " to be added for user:" + userName + " in "
-                                + "JDBCIdentityDataStore");
+                        log.debug("Key:{}, Value:{} to be added for user:{} in JDBCIdentityDataStore", 
+                                key, value, userName);
                     }
                     newClaims.put(key, value);
                 }
@@ -217,9 +217,11 @@ public class JDBCIdentityDataStore extends InMemoryIdentityDataStore {
             Map<String, String> data = getUserDataValues(connection, userName, tenantId);
             IdentityDatabaseUtil.commitTransaction(connection);
             if (log.isDebugEnabled()) {
-                log.debug("Retrieved identity data for:" + tenantId + ":" + userName);
-                for (Map.Entry<String, String> dataEntry : data.entrySet()) {
-                    log.debug(dataEntry.getKey() + " : " + dataEntry.getValue());
+                log.debug("Retrieved identity data for tenant:{}, user:{}", tenantId, userName);
+                if (log.isDebugEnabled()) {
+                    for (Map.Entry<String, String> dataEntry : data.entrySet()) {
+                        log.debug("{} : {}", dataEntry.getKey(), dataEntry.getValue());
+                    }
                 }
             }
             dto = new UserIdentityClaim(userName, data);
@@ -372,8 +374,8 @@ public class JDBCIdentityDataStore extends InMemoryIdentityDataStore {
                         IdentityDatabaseUtil.commitTransaction(connection);
                     } catch (SQLException e) {
                         if (log.isDebugEnabled()) {
-                            log.debug("Error occurred while retrieving users from Identity Store for " + domain +
-                                    "with limit " + limit + "and offset " + offset, e);
+                            log.debug("Error occurred while retrieving users from Identity Store for domain:{} with limit:{} and offset:{}", 
+                                    domain, limit, offset, e);
                         }
                         IdentityDatabaseUtil.rollbackTransaction(connection);
                     }

@@ -103,7 +103,9 @@ public class MobileNumberVerificationHandler extends AbstractEventHandler {
 
         if (!supportMultipleMobileNumbers) {
             // Multiple mobile numbers per user support is disabled.
-            log.debug("Supporting multiple mobile numbers per user is disabled.");
+            if (log.isDebugEnabled()) {
+                log.debug("Supporting multiple mobile numbers per user is disabled");
+            }
             claims.remove(IdentityRecoveryConstants.VERIFIED_MOBILE_NUMBERS_CLAIM);
             claims.remove(IdentityRecoveryConstants.MOBILE_NUMBERS_CLAIM);
         }
@@ -111,8 +113,8 @@ public class MobileNumberVerificationHandler extends AbstractEventHandler {
         if (!enable) {
             // Mobile Number Verification feature is disabled.
             if (log.isDebugEnabled()) {
-                log.debug("Mobile number verification handler is disabled in tenant: " + user.getTenantDomain() +
-                        " for event: " + eventName);
+                log.debug("Mobile number verification handler is disabled in tenant: {} for event: {}", 
+                        user.getTenantDomain(), eventName);
             }
             /* We need to empty 'MOBILE_NUMBER_PENDING_VALUE_CLAIM' because having a value in that claim implies
             a verification is pending. But verification is not enabled anymore. */
@@ -214,7 +216,7 @@ public class MobileNumberVerificationHandler extends AbstractEventHandler {
         String notificationType = IdentityRecoveryConstants.NOTIFICATION_TYPE_VERIFY_MOBILE_ON_UPDATE;
 
         if (log.isDebugEnabled()) {
-            log.debug("Sending: " + notificationType + " notification to user: " + user.toFullQualifiedUsername());
+            log.debug("Sending: {} notification to user: {}", notificationType, user.toFullQualifiedUsername());
         }
 
         String eventName = Utils.resolveEventName(NotificationChannels.SMS_CHANNEL.getChannelType());
@@ -388,10 +390,8 @@ public class MobileNumberVerificationHandler extends AbstractEventHandler {
 
         if (StringUtils.equals(mobileNumber, existingMobileNumber)) {
             if (log.isDebugEnabled()) {
-                log.debug(String.format("The mobile number to be updated: %s is same as the existing mobile " +
-                                "number for user: %s in domain: %s and user store: %s. Hence an SMS OTP " +
-                                "verification will not be triggered.", mobileNumber, username,
-                        user.getTenantDomain(), user.getUserStoreDomain()));
+                log.debug("The mobile number to be updated: {} is same as the existing mobile number for user: {} in domain: {} and user store: {}. Hence an SMS OTP verification will not be triggered.", 
+                        mobileNumber, username, user.getTenantDomain(), user.getUserStoreDomain());
             }
             Utils.setThreadLocalToSkipSendingSmsOtpVerificationOnUpdate(IdentityRecoveryConstants
                     .SkipMobileNumberVerificationOnUpdateStates.SKIP_ON_EXISTING_MOBILE_NUM.toString());
@@ -608,8 +608,8 @@ public class MobileNumberVerificationHandler extends AbstractEventHandler {
                 }
             }
         } catch (org.wso2.carbon.user.api.UserStoreException e) {
-            log.error("Error while looking for the pendingMobileNumber claim from claim manager " +
-                    "in tenant: " + tenantDomain, e);
+            log.error("Error while looking for the pendingMobileNumber claim from claim manager in tenant: {}", 
+                    tenantDomain, e);
             return false;
         }
         return false;
@@ -624,8 +624,8 @@ public class MobileNumberVerificationHandler extends AbstractEventHandler {
                 int tenantId = realmService.getTenantManager().getTenantId(tenantDomain);
                 return realmService.getTenantUserRealm(tenantId);
             } catch (org.wso2.carbon.user.api.UserStoreException e) {
-                log.error("Error while retrieving user realm in mobile verification handler for tenant domain: "
-                        + tenantDomain, e);
+                log.error("Error while retrieving user realm in mobile verification handler for tenant domain: {}", 
+                        tenantDomain, e);
             }
         }
         return null;
@@ -636,7 +636,7 @@ public class MobileNumberVerificationHandler extends AbstractEventHandler {
         try {
             return userRealm.getClaimManager();
         } catch (org.wso2.carbon.user.api.UserStoreException e) {
-            log.error("Error while retrieving claim manager.", e);
+            log.error("Error while retrieving claim manager", e);
         }
         return null;
     }

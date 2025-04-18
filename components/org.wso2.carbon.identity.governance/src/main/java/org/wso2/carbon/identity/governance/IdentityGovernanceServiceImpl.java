@@ -113,7 +113,7 @@ public class IdentityGovernanceServiceImpl implements IdentityGovernanceService 
             log.debug("Client error while updating identityManagement properties of Resident IdP.", e);
             throw new IdentityGovernanceClientException(e.getMessage(), e);
         } catch (IdentityProviderManagementException e) {
-            log.error("Error while updating identityManagement Properties of Resident Idp.", e);
+            log.error("Error while updating identityManagement Properties of Resident Idp", e);
         }
     }
 
@@ -125,7 +125,7 @@ public class IdentityGovernanceServiceImpl implements IdentityGovernanceService 
         try {
             residentIdp = identityProviderManager.getResidentIdP(tenantDomain);
         } catch (IdentityProviderManagementException e) {
-            String errorMsg = String.format("Error while retrieving resident Idp for %s tenant.", tenantDomain);
+            String errorMsg = "Error while retrieving resident Idp for " + tenantDomain + " tenant.";
             throw new IdentityGovernanceException(errorMsg, e);
         }
         IdentityProviderProperty[] identityMgtProperties = residentIdp.getIdpProperties();
@@ -321,8 +321,9 @@ public class IdentityGovernanceServiceImpl implements IdentityGovernanceService 
         }
         
         if (alphanumericPropertyIndex == -1 || numericPropertyIndex == -1) {
-            log.debug("The connector: email OTP doesn't have both old and new email OTP type related " +
-                    "configs.");
+            if (log.isDebugEnabled()) {
+                log.debug("The connector: email OTP doesn't have both old and new email OTP type related configs");
+            }
             return;
         }
 

@@ -64,7 +64,9 @@ public class IdleAccountIdentificationComponent {
     @Deactivate
     protected void deactivate(ComponentContext componentContext) {
 
-        LOG.debug("Idle Account Identification service is deactivated");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Idle Account Identification service is deactivated");
+        }
     }
 
     @Reference(
@@ -83,7 +85,9 @@ public class IdleAccountIdentificationComponent {
 
     protected void unsetRealmService(RealmService realmService) {
 
-        LOG.debug("UnSetting the Realm Service");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("UnSetting the Realm Service");
+        }
         dataHolder.setRealmService(null);
     }
 

@@ -902,8 +902,8 @@ public class CaptchaUtil {
                 }
             }
         } else {
-            log.warn(String.format("Connector configurations are null. Hence return true for %s configuration.",
-                    configName));
+            log.warn("Connector configurations are null. Hence return true for {} configuration.",
+                    configName);
         }
 
         return !Boolean.FALSE.toString().equalsIgnoreCase(configValue);
